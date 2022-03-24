@@ -1,21 +1,28 @@
 import React from 'react';
-import {
-  SafeAreaView, Text, StyleSheet
-} from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
+import { createStore, compose, combineReducers, applyMiddleware } from 'redux';
+import {Provider} from 'react-redux';
+import ReduxThunk from 'redux-thunk';
+
+import AppNavigator from './src/Navigation';
+import newsReducers from './src/store/reducers/newsReducers';
+
+const rootReducer = combineReducers({
+  news: newsReducers,
+});
+
+let composeEnhancers = compose;
+
+const store = createStore(rootReducer, composeEnhancers(applyMiddleware(ReduxThunk)));
 
 const App = () => {
   return (
-    <SafeAreaView>
-      <Text style={styles.textStyle}>Hello</Text>
-    </SafeAreaView>
+    <Provider store={store}>
+      <NavigationContainer>
+        <AppNavigator />
+      </NavigationContainer>
+    </Provider>
   );
 };
-
-const styles = StyleSheet.create({
-  textStyle:{
-    fontWeight: "bold",
-    fontSize: 50
-  }
-});
 
 export default App;
